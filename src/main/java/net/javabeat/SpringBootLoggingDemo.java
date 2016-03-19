@@ -24,7 +24,14 @@ public class SpringBootLoggingDemo {
     TestModel model = new TestModel();
     TestService service = new TestService();
     service.service();
-       
+
+    while(true) {
+      try {
+        Thread.sleep( 1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
 }
