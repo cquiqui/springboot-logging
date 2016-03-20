@@ -18,19 +18,20 @@ public class SpringBootLoggingDemo {
     springApplication.run(args);
     
     logger.error("Message logged at ERROR level");
-    logger.warn("Message logged at WARN level");
+    logger.warn("Message logged at WARN level {} {} {} {} {} {}", 1, 2, 3, 4, 5, "coucou");
     logger.info("Message logged at INFO level");
     logger.debug("Message logged at DEBUG level");
     TestModel model = new TestModel();
     TestService service = new TestService();
     service.service();
 
-    while(true) {
+    for(;;) {
       try {
         Thread.sleep( 1000);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+      break;
     }
   }
 

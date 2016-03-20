@@ -10,5 +10,6 @@
     public void service(){
       logger.info("Message at INFO level from TestService.service()");
       logger.warn("Message at WARN level from TestService.service()");
+      logger.debug("Message at DEBUG level from TestService.service()");
     }
   }
