@@ -7,12 +7,13 @@
     -Dlogging.config="file:./logback.xml"
   -->
 
-	<!-- TEST 1 ============================================================================ -->
-
   <!-- if you w ant to include spring boot own logging add the following line -->
 	<!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
 
 
+  <!-- APPENDERS ============================================================================ -->
+
+  <!-- Console appender -->
 	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<!--<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n</Pattern>-->
@@ -23,6 +24,7 @@
 		</filter>
 	</appender>
 
+  <!-- Every day appender -->
 	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>logs/daily/rest-demo.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -37,6 +39,8 @@
 			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
 		</encoder>
 	</appender>
+
+  <!-- Every minute appender -->
 	<appender name="minuteRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover every minute -->
@@ -51,10 +55,25 @@
 		</encoder>
 	</appender>
 
-  <!-- SPECIFIC LEVEL OF LOGGING BY CLASS -->
+  <!-- Special appender for special log messages -->
+  <appender name="SPECIAL-FILE" class="ch.qos.logback.core.FileAppender">
+    <file>log/special.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+    </encoder>
+  </appender>
+
+
+  <!-- SPECIFIC LEVEL OF LOGGING BY CLASS ================================================= -->
+
   <logger name="net.javabeat.service" level="DEBUG"></logger>
   <logger name="net.javabeat.model" level="DEBUG"></logger>
 
+
+  <!-- LOGGERS ============================================================================ -->
+
+  <!-- Loggers for net.javabeat hierachy -->
   <logger name="net.javabeat" additivity="false">
 		<level value="INFO" /> <!-- general level of logging -->
 		<appender-ref ref="dailyRollingFileAppender"/>
@@ -62,7 +81,17 @@
 		<appender-ref ref="consoleAppender" />
 	</logger>
 
-	<root>
+  <!--  loggers for jfg.logger.special hierarchy
+        additivity=false ensures special messages only goes to the this log
+  -->
+  <logger name="jfg.logger.special" level="DEBUG" additivity="false">
+    <appender-ref ref="SPECIAL-FILE"/>
+  </logger>
+
+
+  <!-- ROOT LOGGER ============================================================================= -->
+
+  <root>
 		<level value="INFO" />
 		<appender-ref ref="consoleAppender" />
 	</root>
