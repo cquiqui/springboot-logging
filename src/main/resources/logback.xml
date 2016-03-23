@@ -10,14 +10,15 @@
   <!-- if you w ant to include spring boot own logging add the following line -->
 	<!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
 
+  <property name="OUTPUT_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS,UTC}] [%-5p] [%-15.15t] [%-50.50c{50}:%5.5L] [%m]%n" />
+
 
   <!-- APPENDERS ============================================================================ -->
 
   <!-- Console appender -->
 	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<!--<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n</Pattern>-->
-      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS,UTC}] %-5p %-20t %-50c{50}:%-5L %m%n</pattern>
+      <pattern>${OUTPUT_PATTERN}</pattern>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>TRACE</level>
@@ -26,38 +27,36 @@
 
   <!-- Every day appender -->
 	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>logs/daily/rest-demo.log</File>
+		<File>logs/rest-demo.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
 			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
-
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
-
 		<encoder>
-			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+      <pattern>${OUTPUT_PATTERN}</pattern>
 		</encoder>
 	</appender>
 
-  <!-- Every minute appender -->
-	<appender name="minuteRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- rollover every minute -->
-			<FileNamePattern>logs/minutes/rest-demo-minute.%d{yyyy-MM-dd_HH-mm}.log</FileNamePattern>
+  <!--&lt;!&ndash; Every minute appender &ndash;&gt;-->
+	<!--<appender name="minuteRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+			<!--&lt;!&ndash; rollover every minute &ndash;&gt;-->
+			<!--<FileNamePattern>logs/minutes/rest-demo-minute.%d{yyyy-MM-dd_HH-mm}.log</FileNamePattern>-->
 
-			<!-- keep 30 minutes' worth of history -->
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
+			<!--&lt;!&ndash; keep 30 minutes' worth of history &ndash;&gt;-->
+			<!--<maxHistory>30</maxHistory>-->
+		<!--</rollingPolicy>-->
 
-		<encoder>
-			<Pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</Pattern>
-		</encoder>
-	</appender>
+		<!--<encoder>-->
+			<!--<Pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</Pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
 
   <!-- Special appender for special log messages -->
   <appender name="SPECIAL-FILE" class="ch.qos.logback.core.FileAppender">
-    <file>log/special.log</file>
+    <file>logs/special.log</file>
     <append>true</append>
     <encoder>
       <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
@@ -73,13 +72,6 @@
 
   <!-- LOGGERS ============================================================================ -->
 
-  <!-- Loggers for net.javabeat hierachy -->
-  <logger name="net.javabeat" additivity="false">
-		<level value="INFO" /> <!-- general level of logging -->
-		<appender-ref ref="dailyRollingFileAppender"/>
-		<appender-ref ref="minuteRollingFileAppender"/>
-		<appender-ref ref="consoleAppender" />
-	</logger>
 
   <!--  loggers for jfg.logger.special hierarchy
         additivity=false ensures special messages only goes to the this log
@@ -93,7 +85,8 @@
 
   <root>
 		<level value="INFO" />
-		<appender-ref ref="consoleAppender" />
+    <appender-ref ref="consoleAppender" />
+    <appender-ref ref="dailyRollingFileAppender" />
 	</root>
 
 </configuration>
