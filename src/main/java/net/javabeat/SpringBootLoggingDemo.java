@@ -20,8 +20,8 @@ public class SpringBootLoggingDemo implements CommandLineRunner {
   private static final Logger logger = LoggerFactory.getLogger(SpringBootLoggingDemo.class);
   private static final Logger special = LoggerFactory.getLogger("jfg.logger.special");
 
-  @Autowired  SimpleBean simpleBean;
-  @Autowired  SimpleNotification simpleNotification;
+  @Autowired  SimpleBean simpleBean; // jmx MBean
+  @Autowired  SimpleNotification simpleNotification; // jmx MBean
 
   @Override
   public void run(String... args) throws Exception {
@@ -42,7 +42,7 @@ public class SpringBootLoggingDemo implements CommandLineRunner {
 
     for(;;) {
       try {
-        simpleNotification.notifyAboutAction("main loop");
+        simpleNotification.notifyAboutAction("main loop"); // jmx notification
         Thread.sleep( 1000);
       } catch (InterruptedException e) {
         e.printStackTrace();
